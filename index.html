@@ -137,6 +137,232 @@
     border-radius: 6px; color: #fff; cursor: pointer;
   }
   #speed-ctrl button.active { border-color: #7fff7f; color: #7fff7f; }
+
+  /* --- SETTINGS GEAR BUTTON --- */
+  #settings-btn {
+    position: fixed; bottom: 16px; right: 24px;
+    font-size: 22px;
+    width: 44px; height: 44px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    color: #fff;
+    cursor: pointer;
+    z-index: 20;
+    transition: transform 0.3s, background 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  #settings-btn:hover { background: rgba(255,255,255,0.15); transform: rotate(30deg); }
+
+  /* --- SETTINGS DRAWER --- */
+  #settings-overlay {
+    position: fixed; inset: 0; z-index: 90;
+    background: rgba(0,0,0,0.4);
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  #settings-overlay.open { opacity: 1; pointer-events: auto; }
+
+  #settings-drawer {
+    position: fixed; top: 0; right: 0; bottom: 0;
+    width: min(340px, 88vw);
+    background: rgba(10,12,18,0.92);
+    backdrop-filter: blur(18px);
+    border-left: 1px solid rgba(255,255,255,0.1);
+    z-index: 91;
+    transform: translateX(100%);
+    transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    color: #fff;
+    font-family: 'VT323', monospace;
+  }
+  #settings-drawer.open { transform: translateX(0); }
+  #settings-drawer::-webkit-scrollbar { width: 4px; }
+  #settings-drawer::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 2px; }
+
+  .settings-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 18px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    position: sticky; top: 0;
+    background: rgba(10,12,18,0.95);
+    backdrop-filter: blur(18px);
+    z-index: 1;
+  }
+  .settings-header h2 {
+    font-family: 'Silkscreen', monospace;
+    font-size: 16px; margin: 0; color: #7fff7f;
+  }
+  .settings-close {
+    background: none; border: none; color: #fff; font-size: 24px;
+    cursor: pointer; padding: 4px 8px; line-height: 1;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .settings-section {
+    padding: 14px 18px 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .settings-section h3 {
+    font-family: 'Silkscreen', monospace;
+    font-size: 11px; color: rgba(255,255,255,0.4);
+    text-transform: uppercase; letter-spacing: 1px;
+    margin: 0 0 10px;
+  }
+
+  /* Preset buttons row */
+  .preset-row {
+    display: flex; gap: 6px; flex-wrap: wrap;
+  }
+  .preset-btn {
+    font-family: 'Silkscreen', monospace; font-size: 12px;
+    padding: 7px 14px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 6px; color: #fff; cursor: pointer;
+    flex: 1; min-width: 60px; text-align: center;
+    transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .preset-btn.active { border-color: #7fff7f; color: #7fff7f; background: rgba(127,255,127,0.08); }
+  .preset-btn:hover { background: rgba(255,255,255,0.1); }
+
+  /* Setting row: label + control */
+  .setting-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 0; gap: 12px;
+    min-height: 40px;
+  }
+  .setting-label {
+    font-size: 15px; color: rgba(255,255,255,0.75);
+    white-space: nowrap; flex-shrink: 0;
+  }
+  .setting-value {
+    font-family: 'Silkscreen', monospace;
+    font-size: 12px; color: #7fff7f;
+    min-width: 42px; text-align: right;
+  }
+
+  /* Range slider */
+  .setting-slider {
+    flex: 1; min-width: 0;
+    -webkit-appearance: none; appearance: none;
+    height: 6px; border-radius: 3px;
+    background: rgba(255,255,255,0.12);
+    outline: none;
+  }
+  .setting-slider::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 20px; height: 20px; border-radius: 50%;
+    background: #7fff7f; cursor: pointer;
+    border: 2px solid rgba(0,0,0,0.3);
+  }
+  .setting-slider::-moz-range-thumb {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: #7fff7f; cursor: pointer; border: 2px solid rgba(0,0,0,0.3);
+  }
+
+  /* Toggle switch */
+  .toggle-switch {
+    position: relative; width: 44px; height: 24px; flex-shrink: 0;
+  }
+  .toggle-switch input { opacity: 0; width: 0; height: 0; }
+  .toggle-track {
+    position: absolute; inset: 0; border-radius: 12px;
+    background: rgba(255,255,255,0.15);
+    transition: background 0.2s; cursor: pointer;
+  }
+  .toggle-track::after {
+    content: ''; position: absolute;
+    top: 2px; left: 2px; width: 20px; height: 20px;
+    border-radius: 50%; background: #fff;
+    transition: transform 0.2s;
+  }
+  .toggle-switch input:checked + .toggle-track {
+    background: #7fff7f;
+  }
+  .toggle-switch input:checked + .toggle-track::after {
+    transform: translateX(20px);
+  }
+
+  /* Segmented buttons */
+  .seg-row {
+    display: flex; gap: 4px; flex: 1;
+  }
+  .seg-btn {
+    font-family: 'VT323', monospace; font-size: 14px;
+    padding: 5px 8px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 4px; color: rgba(255,255,255,0.6); cursor: pointer;
+    flex: 1; text-align: center;
+    transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .seg-btn.active { border-color: #7fff7f; color: #7fff7f; background: rgba(127,255,127,0.08); }
+
+  /* FPS counter */
+  #fps-counter {
+    position: fixed; top: 8px; right: 8px;
+    font-family: 'Silkscreen', monospace; font-size: 12px;
+    color: #7fff7f; background: rgba(0,0,0,0.5);
+    padding: 3px 8px; border-radius: 4px; z-index: 15;
+    pointer-events: none; display: none;
+  }
+
+  /* Move weather button up to make room for settings gear */
+  #weather-btn { bottom: 68px; }
+
+  /* --- RESPONSIVE: PHONE PORTRAIT BASELINE --- */
+  @media (max-width: 600px) {
+    #hud {
+      flex-direction: column; gap: 6px;
+      padding: 8px 10px;
+    }
+    .hud-panel {
+      padding: 6px 10px;
+      font-size: 13px; line-height: 1.4;
+      width: 100%;
+    }
+    .hud-panel .value { font-size: 15px; }
+    .hud-panel .label { font-size: 11px; }
+
+    #speed-ctrl {
+      left: 10px; bottom: 10px; gap: 4px;
+    }
+    #speed-ctrl label { font-size: 11px; }
+    #speed-ctrl button { font-size: 11px; padding: 6px 8px; min-width: 36px; }
+
+    #weather-btn {
+      right: 10px; bottom: 58px;
+      font-size: 12px; padding: 8px 12px;
+    }
+    #settings-btn {
+      right: 10px; bottom: 10px;
+    }
+
+    #achievement {
+      font-size: 14px; padding: 10px 16px;
+      white-space: normal; max-width: 90vw;
+      bottom: 60px;
+    }
+
+    #controls-hint { display: none !important; }
+
+    #title-screen h1 { font-size: clamp(22px, 6vw, 40px); }
+    #title-screen .sub { font-size: clamp(13px, 3vw, 20px); margin-bottom: 24px; }
+    #start-btn { font-size: 18px; padding: 14px 36px; }
+  }
+
+  @media (max-width: 380px) {
+    .hud-panel { padding: 4px 8px; font-size: 12px; }
+    .hud-panel .value { font-size: 13px; }
+    #speed-ctrl button { padding: 5px 6px; font-size: 10px; }
+  }
 </style>
 </head>
 <body>
@@ -172,6 +398,113 @@
 </div>
 
 <button id="weather-btn" style="display:none">🌧️ TOGGLE RAIN</button>
+<button id="settings-btn" style="display:none">⚙</button>
+<div id="fps-counter">-- FPS</div>
+
+<div id="settings-overlay"></div>
+<div id="settings-drawer">
+  <div class="settings-header">
+    <h2>⚙ SETTINGS</h2>
+    <button class="settings-close">✕</button>
+  </div>
+
+  <div class="settings-section">
+    <h3>Quality Preset</h3>
+    <div class="preset-row">
+      <button class="preset-btn" data-preset="low">LOW</button>
+      <button class="preset-btn" data-preset="medium">MED</button>
+      <button class="preset-btn active" data-preset="high">HIGH</button>
+      <button class="preset-btn" data-preset="ultra">ULTRA</button>
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <h3>Rendering</h3>
+    <div class="setting-row">
+      <span class="setting-label">Grass Density</span>
+      <input class="setting-slider" type="range" id="s-grass" min="10000" max="200000" step="5000" value="200000">
+      <span class="setting-value" id="sv-grass">200K</span>
+    </div>
+    <div class="setting-row">
+      <span class="setting-label">Pixel Ratio</span>
+      <input class="setting-slider" type="range" id="s-pixelratio" min="0.5" max="2.0" step="0.25" value="1.5">
+      <span class="setting-value" id="sv-pixelratio">1.5</span>
+    </div>
+    <div class="setting-row">
+      <span class="setting-label">Draw Distance</span>
+      <input class="setting-slider" type="range" id="s-drawdist" min="500" max="2000" step="100" value="2000">
+      <span class="setting-value" id="sv-drawdist">2000</span>
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <h3>Shadows</h3>
+    <div class="setting-row">
+      <span class="setting-label">Shadows</span>
+      <label class="toggle-switch"><input type="checkbox" id="s-shadows" checked><span class="toggle-track"></span></label>
+    </div>
+    <div class="setting-row">
+      <span class="setting-label">Shadow Res</span>
+      <div class="seg-row">
+        <button class="seg-btn" data-shadow="512">512</button>
+        <button class="seg-btn" data-shadow="1024">1024</button>
+        <button class="seg-btn active" data-shadow="2048">2048</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <h3>Post-Processing</h3>
+    <div class="setting-row">
+      <span class="setting-label">Bloom</span>
+      <label class="toggle-switch"><input type="checkbox" id="s-bloom" checked><span class="toggle-track"></span></label>
+    </div>
+    <div class="setting-row">
+      <span class="setting-label">Bloom Strength</span>
+      <input class="setting-slider" type="range" id="s-bloomstr" min="0" max="1.0" step="0.05" value="0.35">
+      <span class="setting-value" id="sv-bloomstr">0.35</span>
+    </div>
+    <div class="setting-row">
+      <span class="setting-label">Antialias</span>
+      <label class="toggle-switch"><input type="checkbox" id="s-antialias" checked><span class="toggle-track"></span></label>
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <h3>Environment</h3>
+    <div class="setting-row">
+      <span class="setting-label">Clouds</span>
+      <input class="setting-slider" type="range" id="s-clouds" min="0" max="25" step="1" value="18">
+      <span class="setting-value" id="sv-clouds">18</span>
+    </div>
+    <div class="setting-row">
+      <span class="setting-label">Rain Particles</span>
+      <input class="setting-slider" type="range" id="s-rain" min="0" max="12000" step="500" value="8000">
+      <span class="setting-value" id="sv-rain">8K</span>
+    </div>
+    <div class="setting-row">
+      <span class="setting-label">Terrain Detail</span>
+      <div class="seg-row">
+        <button class="seg-btn" data-terrain="64">Low</button>
+        <button class="seg-btn" data-terrain="128">Med</button>
+        <button class="seg-btn active" data-terrain="192">High</button>
+      </div>
+    </div>
+    <div class="setting-row">
+      <span class="setting-label">Fog Density</span>
+      <input class="setting-slider" type="range" id="s-fog" min="0" max="0.005" step="0.0002" value="0.0018">
+      <span class="setting-value" id="sv-fog">0.0018</span>
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <h3>Debug</h3>
+    <div class="setting-row">
+      <span class="setting-label">FPS Counter</span>
+      <label class="toggle-switch"><input type="checkbox" id="s-fps"><span class="toggle-track"></span></label>
+    </div>
+  </div>
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
@@ -210,8 +543,35 @@ let camDist = 35;
 let keys = {};
 
 const FIELD_SIZE = 350;
-const GRASS_COUNT = 200000;
-const TERRAIN_SEG = 192;
+let GRASS_COUNT = 200000;
+let TERRAIN_SEG = 192;
+let bloomPass = null;
+
+// --- GRAPHICS SETTINGS ---
+const gfx = {
+  grassCount: 200000,
+  shadows: true,
+  shadowRes: 2048,
+  bloom: true,
+  bloomStrength: 0.35,
+  antialias: true,
+  pixelRatio: Math.min(window.devicePixelRatio, 2),
+  cloudCount: 18,
+  rainCount: 8000,
+  terrainSeg: 192,
+  drawDist: 2000,
+  fogDensity: 0.0018,
+  showFps: false,
+};
+
+const PRESETS = {
+  low:    { grassCount:25000,  shadows:false, shadowRes:512,  bloom:false, bloomStrength:0.2,  pixelRatio:0.75, cloudCount:6,  rainCount:2000,  terrainSeg:64,  drawDist:1000, fogDensity:0.003 },
+  medium: { grassCount:80000,  shadows:true,  shadowRes:1024, bloom:true,  bloomStrength:0.2,  pixelRatio:1.0,  cloudCount:12, rainCount:5000,  terrainSeg:128, drawDist:1500, fogDensity:0.0022 },
+  high:   { grassCount:200000, shadows:true,  shadowRes:2048, bloom:true,  bloomStrength:0.35, pixelRatio:Math.min(window.devicePixelRatio, 2), cloudCount:18, rainCount:8000, terrainSeg:192, drawDist:2000, fogDensity:0.0018 },
+  ultra:  { grassCount:200000, shadows:true,  shadowRes:2048, bloom:true,  bloomStrength:0.5,  pixelRatio:2.0,  cloudCount:25, rainCount:10000, terrainSeg:192, drawDist:2000, fogDensity:0.0012 },
+};
+
+let fpsFrames = 0, fpsTime = 0;
 
 // --- SIMPLE NOISE ---
 function hash(x, y) {
@@ -252,25 +612,33 @@ function init() {
   camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.5, 2000);
   camera.position.set(0, 20, 35);
 
-  renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer = new THREE.WebGLRenderer({ antialias: gfx.antialias });
   renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.shadowMap.enabled = true;
+  renderer.setPixelRatio(gfx.pixelRatio);
+  renderer.shadowMap.enabled = gfx.shadows;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.1;
   document.body.appendChild(renderer.domElement);
 
+  camera.far = gfx.drawDist;
+  camera.updateProjectionMatrix();
+  scene.fog.density = gfx.fogDensity;
+
   // Post-processing: bloom
   composer = new THREE.EffectComposer(renderer);
   composer.addPass(new THREE.RenderPass(scene, camera));
-  const bloomPass = new THREE.UnrealBloomPass(
+  bloomPass = new THREE.UnrealBloomPass(
     new THREE.Vector2(window.innerWidth, window.innerHeight),
-    0.35,  // strength
-    0.6,   // radius
-    0.85   // threshold
+    gfx.bloomStrength,
+    0.6,
+    0.85
   );
+  bloomPass.enabled = gfx.bloom;
   composer.addPass(bloomPass);
+
+  GRASS_COUNT = gfx.grassCount;
+  TERRAIN_SEG = gfx.terrainSeg;
 
   createSky();
   createLights();
@@ -657,7 +1025,7 @@ function createClouds() {
   `;
 
   // Create several large cloud planes at different altitudes
-  for (let i = 0; i < 18; i++) {
+  for (let i = 0; i < gfx.cloudCount; i++) {
     const size = 120 + Math.random() * 200;
     const geo = new THREE.PlaneGeometry(size, size * (0.5 + Math.random() * 0.4));
     const mat = new THREE.ShaderMaterial({
@@ -693,7 +1061,7 @@ function createClouds() {
 
 // --- RAIN ---
 function createRain() {
-  const count = 8000;
+  const count = gfx.rainCount;
   const geo = new THREE.BufferGeometry();
   const positions = new Float32Array(count * 3);
   const velocities = new Float32Array(count);
@@ -719,6 +1087,7 @@ function createRain() {
   scene.add(rainSystem);
 }
 
+
 // --- CONTROLS ---
 function setupControls() {
   document.addEventListener('keydown', e => keys[e.key.toLowerCase()] = true);
@@ -737,17 +1106,37 @@ function setupControls() {
     camDist = Math.max(8, Math.min(150, camDist + e.deltaY * 0.05));
   });
 
-  // Touch
+  // Touch (single-finger drag + pinch-to-zoom)
+  let pinching = false, lastPinchDist = 0;
+  function getTouchDist(t) {
+    const dx = t[0].clientX - t[1].clientX, dy = t[0].clientY - t[1].clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+  }
   renderer.domElement.addEventListener('touchstart', e => {
-    if (e.touches.length === 1) { dragging = true; lastX = e.touches[0].clientX; lastY = e.touches[0].clientY; }
+    if (e.touches.length === 2) {
+      pinching = true; dragging = false;
+      lastPinchDist = getTouchDist(e.touches);
+    } else if (e.touches.length === 1 && !pinching) {
+      dragging = true; lastX = e.touches[0].clientX; lastY = e.touches[0].clientY;
+    }
   });
   renderer.domElement.addEventListener('touchmove', e => {
-    if (!dragging || e.touches.length !== 1) return;
-    camAngleH -= (e.touches[0].clientX - lastX) * 0.005;
-    camAngleV = Math.max(-0.1, Math.min(1.2, camAngleV + (e.touches[0].clientY - lastY) * 0.005));
-    lastX = e.touches[0].clientX; lastY = e.touches[0].clientY;
+    e.preventDefault();
+    if (e.touches.length === 2 && pinching) {
+      const dist = getTouchDist(e.touches);
+      const delta = lastPinchDist - dist;
+      camDist = Math.max(8, Math.min(150, camDist + delta * 0.15));
+      lastPinchDist = dist;
+    } else if (e.touches.length === 1 && dragging && !pinching) {
+      camAngleH -= (e.touches[0].clientX - lastX) * 0.005;
+      camAngleV = Math.max(-0.1, Math.min(1.2, camAngleV + (e.touches[0].clientY - lastY) * 0.005));
+      lastX = e.touches[0].clientX; lastY = e.touches[0].clientY;
+    }
+  }, { passive: false });
+  renderer.domElement.addEventListener('touchend', e => {
+    if (e.touches.length < 2) pinching = false;
+    if (e.touches.length === 0) dragging = false;
   });
-  renderer.domElement.addEventListener('touchend', () => dragging = false);
 
   window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
@@ -768,6 +1157,193 @@ function setupControls() {
       timeSpeed = parseFloat(btn.dataset.speed);
     });
   });
+}
+
+// --- SETTINGS UI ---
+function setupSettings() {
+  const drawer = document.getElementById('settings-drawer');
+  const overlay = document.getElementById('settings-overlay');
+  const openBtn = document.getElementById('settings-btn');
+  const closeBtn = drawer.querySelector('.settings-close');
+
+  function toggleDrawer(open) {
+    drawer.classList.toggle('open', open);
+    overlay.classList.toggle('open', open);
+  }
+  openBtn.addEventListener('click', () => toggleDrawer(true));
+  closeBtn.addEventListener('click', () => toggleDrawer(false));
+  overlay.addEventListener('click', () => toggleDrawer(false));
+
+  // --- HELPER: sync UI to gfx state ---
+  function syncUI() {
+    document.getElementById('s-grass').value = gfx.grassCount;
+    document.getElementById('sv-grass').textContent = (gfx.grassCount / 1000) + 'K';
+    document.getElementById('s-pixelratio').value = gfx.pixelRatio;
+    document.getElementById('sv-pixelratio').textContent = gfx.pixelRatio.toFixed(2);
+    document.getElementById('s-drawdist').value = gfx.drawDist;
+    document.getElementById('sv-drawdist').textContent = gfx.drawDist;
+    document.getElementById('s-shadows').checked = gfx.shadows;
+    document.querySelectorAll('[data-shadow]').forEach(b => {
+      b.classList.toggle('active', parseInt(b.dataset.shadow) === gfx.shadowRes);
+    });
+    document.getElementById('s-bloom').checked = gfx.bloom;
+    document.getElementById('s-bloomstr').value = gfx.bloomStrength;
+    document.getElementById('sv-bloomstr').textContent = gfx.bloomStrength.toFixed(2);
+    document.getElementById('s-antialias').checked = gfx.antialias;
+    document.getElementById('s-clouds').value = gfx.cloudCount;
+    document.getElementById('sv-clouds').textContent = gfx.cloudCount;
+    document.getElementById('s-rain').value = gfx.rainCount;
+    document.getElementById('sv-rain').textContent = (gfx.rainCount / 1000) + 'K';
+    document.querySelectorAll('[data-terrain]').forEach(b => {
+      b.classList.toggle('active', parseInt(b.dataset.terrain) === gfx.terrainSeg);
+    });
+    document.getElementById('s-fog').value = gfx.fogDensity;
+    document.getElementById('sv-fog').textContent = gfx.fogDensity.toFixed(4);
+    document.getElementById('s-fps').checked = gfx.showFps;
+  }
+
+  // --- PRESETS ---
+  document.querySelectorAll('.preset-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const p = PRESETS[btn.dataset.preset];
+      if (!p) return;
+      Object.assign(gfx, p);
+      document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      syncUI();
+      applyAllSettings();
+    });
+  });
+
+  // --- INDIVIDUAL CONTROLS ---
+  // Sliders
+  function bindSlider(id, valueId, key, fmt, apply) {
+    const slider = document.getElementById(id);
+    const val = document.getElementById(valueId);
+    slider.addEventListener('input', () => {
+      gfx[key] = parseFloat(slider.value);
+      val.textContent = fmt(gfx[key]);
+      clearActivePreset();
+    });
+    slider.addEventListener('change', () => { if (apply) apply(); });
+  }
+  bindSlider('s-grass', 'sv-grass', 'grassCount', v => (v/1000)+'K', () => rebuildGrass());
+  bindSlider('s-pixelratio', 'sv-pixelratio', 'pixelRatio', v => v.toFixed(2), () => {
+    renderer.setPixelRatio(gfx.pixelRatio);
+    composer.setSize(window.innerWidth, window.innerHeight);
+  });
+  bindSlider('s-drawdist', 'sv-drawdist', 'drawDist', v => v, () => {
+    camera.far = gfx.drawDist;
+    camera.updateProjectionMatrix();
+  });
+  bindSlider('s-bloomstr', 'sv-bloomstr', 'bloomStrength', v => v.toFixed(2), () => {
+    if (bloomPass) bloomPass.strength = gfx.bloomStrength;
+  });
+  bindSlider('s-clouds', 'sv-clouds', 'cloudCount', v => v, () => rebuildClouds());
+  bindSlider('s-rain', 'sv-rain', 'rainCount', v => (v/1000)+'K', () => rebuildRain());
+  bindSlider('s-fog', 'sv-fog', 'fogDensity', v => v.toFixed(4), () => {
+    scene.fog.density = gfx.fogDensity;
+  });
+
+  // Toggles
+  document.getElementById('s-shadows').addEventListener('change', e => {
+    gfx.shadows = e.target.checked;
+    renderer.shadowMap.enabled = gfx.shadows;
+    terrainMesh.receiveShadow = gfx.shadows;
+    grassMesh.castShadow = gfx.shadows;
+    clearActivePreset();
+  });
+  document.getElementById('s-bloom').addEventListener('change', e => {
+    gfx.bloom = e.target.checked;
+    if (bloomPass) bloomPass.enabled = gfx.bloom;
+    clearActivePreset();
+  });
+  document.getElementById('s-antialias').addEventListener('change', e => {
+    gfx.antialias = e.target.checked;
+    // Antialias requires renderer rebuild — flag for user
+    clearActivePreset();
+  });
+  document.getElementById('s-fps').addEventListener('change', e => {
+    gfx.showFps = e.target.checked;
+    document.getElementById('fps-counter').style.display = gfx.showFps ? 'block' : 'none';
+  });
+
+  // Segmented buttons: shadow res
+  document.querySelectorAll('[data-shadow]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      gfx.shadowRes = parseInt(btn.dataset.shadow);
+      document.querySelectorAll('[data-shadow]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      sunLight.shadow.mapSize.set(gfx.shadowRes, gfx.shadowRes);
+      if (sunLight.shadow.map) { sunLight.shadow.map.dispose(); sunLight.shadow.map = null; }
+      clearActivePreset();
+    });
+  });
+
+  // Segmented buttons: terrain detail
+  document.querySelectorAll('[data-terrain]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      gfx.terrainSeg = parseInt(btn.dataset.terrain);
+      document.querySelectorAll('[data-terrain]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      rebuildTerrain();
+      clearActivePreset();
+    });
+  });
+
+  function clearActivePreset() {
+    document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+  }
+
+  // Auto-detect mobile and default to Low
+  if (/Android|iPhone|iPod|iPad/.test(navigator.userAgent) || window.innerWidth < 600) {
+    const lowBtn = document.querySelector('[data-preset="low"]');
+    if (lowBtn) lowBtn.click();
+  }
+
+  syncUI();
+}
+
+// --- REBUILD FUNCTIONS ---
+function rebuildGrass() {
+  if (grassMesh) { scene.remove(grassMesh); grassMesh.geometry.dispose(); grassMesh.material.dispose(); }
+  GRASS_COUNT = gfx.grassCount;
+  createGrass();
+}
+
+function rebuildTerrain() {
+  if (terrainMesh) { scene.remove(terrainMesh); terrainMesh.geometry.dispose(); terrainMesh.material.dispose(); }
+  TERRAIN_SEG = gfx.terrainSeg;
+  createTerrain();
+}
+
+function rebuildClouds() {
+  cloudPlanes.forEach(c => { scene.remove(c); c.geometry.dispose(); c.material.dispose(); });
+  cloudPlanes = [];
+  createClouds();
+}
+
+function rebuildRain() {
+  if (rainSystem) { scene.remove(rainSystem); rainSystem.geometry.dispose(); rainSystem.material.dispose(); rainSystem = null; }
+  createRain();
+}
+
+function applyAllSettings() {
+  renderer.setPixelRatio(gfx.pixelRatio);
+  composer.setSize(window.innerWidth, window.innerHeight);
+  camera.far = gfx.drawDist;
+  camera.updateProjectionMatrix();
+  scene.fog.density = gfx.fogDensity;
+  renderer.shadowMap.enabled = gfx.shadows;
+  if (terrainMesh) terrainMesh.receiveShadow = gfx.shadows;
+  sunLight.shadow.mapSize.set(gfx.shadowRes, gfx.shadowRes);
+  if (sunLight.shadow.map) { sunLight.shadow.map.dispose(); sunLight.shadow.map = null; }
+  if (bloomPass) { bloomPass.enabled = gfx.bloom; bloomPass.strength = gfx.bloomStrength; }
+  document.getElementById('fps-counter').style.display = gfx.showFps ? 'block' : 'none';
+  rebuildGrass();
+  rebuildTerrain();
+  rebuildClouds();
+  rebuildRain();
 }
 
 // --- ACHIEVEMENTS ---
@@ -994,6 +1570,15 @@ function animate() {
   checkAchievements(realTime, grownCount);
   showNextAchievement();
 
+  // FPS counter
+  fpsFrames++;
+  fpsTime += dt;
+  if (fpsTime >= 0.5) {
+    const fps = Math.round(fpsFrames / fpsTime);
+    document.getElementById('fps-counter').textContent = fps + ' FPS';
+    fpsFrames = 0; fpsTime = 0;
+  }
+
   composer.render();
 }
 
@@ -1004,7 +1589,9 @@ document.getElementById('start-btn').addEventListener('click', () => {
   document.getElementById('controls-hint').style.display = 'block';
   document.getElementById('weather-btn').style.display = 'block';
   document.getElementById('speed-ctrl').style.display = 'flex';
+  document.getElementById('settings-btn').style.display = 'flex';
   init();
+  setupSettings();
 });
 </script>
 </body>
