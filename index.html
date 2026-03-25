@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GRASS</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <div id="hud">
+    <div id="hud-left">
+      <h1 id="title">GRASS</h1>
+      <div id="subtitle">the game</div>
+    </div>
+    <div id="hud-right">
+      <div id="stat-blades">Blades Grown: <span>0</span></div>
+      <div id="stat-time">Time Watched: <span>0:00</span></div>
+      <div id="stat-height">Avg Height: <span>0%</span></div>
+      <div id="stat-weather">Weather: <span>Clear</span></div>
+      <div id="stat-time-of-day">Time of Day: <span>Noon</span></div>
+    </div>
+  </div>
+
+  <div id="achievements"></div>
+
+  <div id="instructions">
+    <div>Click and drag to look around. Scroll to zoom.</div>
+    <div>Now sit back and watch the grass grow.</div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
