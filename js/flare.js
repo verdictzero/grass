@@ -174,11 +174,11 @@ function createFlares() {
 }
 
 function updateFlares(dt) {
-  updateFlareGroup(sunFlare, sunSphere, sunDir, true);
-  updateFlareGroup(moonFlare, moonSphere, moonDir, false);
+  updateFlareGroup(sunFlare, sunSphere, sunDir, true, dt);
+  updateFlareGroup(moonFlare, moonSphere, moonDir, false, dt);
 }
 
-function updateFlareGroup(flare, sphere, dir, isSun) {
+function updateFlareGroup(flare, sphere, dir, isSun, dt) {
   if (!flare || !sphere) return;
 
   // Check visibility
