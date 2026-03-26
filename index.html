@@ -142,31 +142,62 @@
   </div>
 </div>
 
-<!-- Three.js (local) -->
-<script src="lib/three.min.js"></script>
-<script src="lib/EffectComposer.js"></script>
-<script src="lib/RenderPass.js"></script>
-<script src="lib/UnrealBloomPass.js"></script>
-<script src="lib/CopyShader.js"></script>
-<script src="lib/LuminosityHighPassShader.js"></script>
-<script src="lib/ShaderPass.js"></script>
+<!-- Three.js + game loader: CDN primary, local lib/ fallback -->
+<script>
+(function() {
+  var libs = [
+    { cdn: 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js', local: 'lib/three.min.js' },
+    { cdn: 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js', local: 'lib/EffectComposer.js' },
+    { cdn: 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js', local: 'lib/RenderPass.js' },
+    { cdn: 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js', local: 'lib/UnrealBloomPass.js' },
+    { cdn: 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js', local: 'lib/CopyShader.js' },
+    { cdn: 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js', local: 'lib/LuminosityHighPassShader.js' },
+    { cdn: 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js', local: 'lib/ShaderPass.js' }
+  ];
 
-<!-- Game scripts (order matters) -->
-<script src="js/config.js"></script>
-<script src="js/noise.js"></script>
-<script src="js/sky.js"></script>
-<script src="js/lights.js"></script>
-<script src="js/terrain.js"></script>
-<script src="js/grass.js"></script>
-<script src="js/clouds.js"></script>
-<script src="js/weather.js"></script>
-<script src="js/fog.js"></script>
-<script src="js/lightning.js"></script>
-<script src="js/tornado.js"></script>
-<script src="js/flare.js"></script>
-<script src="js/controls.js"></script>
-<script src="js/ui.js"></script>
-<script src="js/main.js"></script>
+  var gameScripts = [
+    'js/config.js', 'js/noise.js', 'js/sky.js', 'js/lights.js',
+    'js/terrain.js', 'js/grass.js', 'js/clouds.js', 'js/weather.js',
+    'js/fog.js', 'js/lightning.js', 'js/tornado.js', 'js/flare.js',
+    'js/controls.js', 'js/ui.js', 'js/main.js'
+  ];
+
+  function loadScript(src) {
+    return new Promise(function(resolve, reject) {
+      var s = document.createElement('script');
+      s.src = src;
+      s.onload = resolve;
+      s.onerror = reject;
+      document.body.appendChild(s);
+    });
+  }
+
+  function loadLib(lib) {
+    return loadScript(lib.cdn).then(function() {
+      console.log('[Loader] CDN OK: ' + lib.cdn);
+    }).catch(function() {
+      console.warn('[Loader] CDN failed, falling back to local: ' + lib.local);
+      return loadScript(lib.local);
+    });
+  }
+
+  // Load libs sequentially (order matters), then game scripts
+  libs.reduce(function(chain, lib) {
+    return chain.then(function() { return loadLib(lib); });
+  }, Promise.resolve())
+  .then(function() {
+    console.log('[Loader] All libraries loaded — THREE r' + THREE.REVISION);
+    return gameScripts.reduce(function(chain, src) {
+      return chain.then(function() { return loadScript(src); });
+    }, Promise.resolve());
+  })
+  .catch(function(err) {
+    console.error('[Loader] Fatal: failed to load a required script', err);
+    document.body.innerHTML = '<h1 style="color:red;font-family:monospace;text-align:center;margin-top:20%">' +
+      'Failed to load game libraries.<br>Check your connection and refresh.</h1>';
+  });
+})();
+</script>
 
 </body>
 </html>
