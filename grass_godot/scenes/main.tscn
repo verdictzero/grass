@@ -1,0 +1,62 @@
+[gd_scene load_steps=16 format=3 uid="uid://bmain1"]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/camera_controller.gd" id="2"]
+[ext_resource type="Script" path="res://scripts/sky_manager.gd" id="3"]
+[ext_resource type="Script" path="res://scripts/terrain_manager.gd" id="4"]
+[ext_resource type="Script" path="res://scripts/grass_manager.gd" id="5"]
+[ext_resource type="Script" path="res://scripts/weather_manager.gd" id="6"]
+[ext_resource type="Script" path="res://scripts/cloud_manager.gd" id="7"]
+[ext_resource type="Script" path="res://scripts/rain_snow_manager.gd" id="8"]
+[ext_resource type="Script" path="res://scripts/fog_manager.gd" id="9"]
+[ext_resource type="Script" path="res://scripts/lightning_manager.gd" id="10"]
+[ext_resource type="Script" path="res://scripts/tornado_manager.gd" id="11"]
+[ext_resource type="Script" path="res://scripts/flare_manager.gd" id="12"]
+[ext_resource type="PackedScene" path="res://scenes/title_screen.tscn" id="13"]
+[ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="14"]
+[ext_resource type="PackedScene" path="res://scenes/settings_drawer.tscn" id="15"]
+
+[node name="Main" type="Node3D"]
+script = ExtResource("1")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, 45)
+fov = 60.0
+far = 5000.0
+script = ExtResource("2")
+
+[node name="SkyManager" type="Node3D" parent="."]
+script = ExtResource("3")
+
+[node name="TerrainManager" type="Node3D" parent="."]
+script = ExtResource("4")
+
+[node name="GrassManager" type="Node3D" parent="."]
+script = ExtResource("5")
+
+[node name="WeatherManager" type="Node" parent="."]
+script = ExtResource("6")
+
+[node name="CloudManager" type="Node3D" parent="."]
+script = ExtResource("7")
+
+[node name="RainSnowManager" type="Node3D" parent="."]
+script = ExtResource("8")
+
+[node name="FogManager" type="Node3D" parent="."]
+script = ExtResource("9")
+
+[node name="LightningManager" type="Node3D" parent="."]
+script = ExtResource("10")
+
+[node name="TornadoManager" type="Node3D" parent="."]
+script = ExtResource("11")
+
+[node name="FlareManager" type="Node3D" parent="."]
+script = ExtResource("12")
+
+[node name="TitleScreen" parent="." instance=ExtResource("13")]
+
+[node name="HUD" parent="." instance=ExtResource("14")]
+
+[node name="SettingsDrawer" parent="." instance=ExtResource("15")]
