@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌱 Grass Growing Simulator 2026 — GOTY Edition</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="title-screen">
+  <h1>🌱 GRASS GROWING<br>SIMULATOR 2026</h1>
+  <div class="sub"><em>GOTY Edition</em> — Featuring Ultra-Realistic Blade Physics™</div>
+  <button id="start-btn">▶ TOUCH GRASS</button>
+</div>
+
+<div id="hud" style="display:none">
+  <div class="hud-panel" id="stats-panel">
+    <div><span class="label">BLADES GROWN:</span> <span class="value" id="blade-count">0</span></div>
+    <div><span class="label">AVG HEIGHT:</span> <span class="value" id="avg-height">0.0 cm</span></div>
+    <div><span class="label">GRASS SCORE:</span> <span class="value" id="grass-score">0</span></div>
+  </div>
+  <div class="hud-panel" id="env-panel">
+    <div><span class="label">TIME:</span> <span class="value time" id="time-display">12:00 PM</span></div>
+    <div><span class="label">WEATHER:</span> <span class="value rain" id="weather-display">☀️ Clear</span></div>
+    <div><span class="label">WIND:</span> <span class="value" id="wind-display">Calm</span></div>
+  </div>
+</div>
+
+<div id="controls-hint" style="display:none">WASD/Arrows to move • Mouse to look • Scroll to zoom</div>
+
+<div id="speed-ctrl" style="display:none">
+  <label>TIME:</label>
+  <button data-speed="0.5">0.5x</button>
+  <button data-speed="1" class="active">1x</button>
+  <button data-speed="3">3x</button>
+  <button data-speed="10">10x</button>
+</div>
+
+<button id="weather-btn" style="display:none">☀️ CLEAR</button>
+<button id="settings-btn" style="display:none">⚙</button>
+<div id="fps-counter">-- FPS</div>
+
+<div id="settings-overlay"></div>
+<div id="settings-drawer">
+  <div class="settings-header">
+    <h2>⚙ SETTINGS</h2>
+    <button class="settings-close">✕</button>
+  </div>
+
+  <div class="settings-section">
+    <h3>Quality Preset</h3>
+    <div class="preset-row">
+      <button class="preset-btn" data-preset="low">LOW</button>
+      <button class="preset-btn" data-preset="medium">MED</button>
+      <button class="preset-btn active" data-preset="high">HIGH</button>
+      <button class="preset-btn" data-preset="ultra">ULTRA</button>
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <h3>Rendering</h3>
+    <div class="setting-row">
+      <span class="setting-label">Grass Density</span>
+      <input class="setting-slider" type="range" id="s-grass" min="10000" max="200000" step="5000" value="200000">
+      <span class="setting-value" id="sv-grass">200K</span>
+    </div>
+    <div class="setting-row">
+      <span class="setting-label">Pixel Ratio</span>
+      <input class="setting-slider" type="range" id="s-pixelratio" min="0.5" max="2.0" step="0.25" value="1.5">
+      <span class="setting-value" id="sv-pixelratio">1.5</span>
+    </div>
+    <div class="setting-row">
+      <span class="setting-label">Draw Distance</span>
+      <input class="setting-slider" type="range" id="s-drawdist" min="500" max="10000" step="500" value="5000">
+      <span class="setting-value" id="sv-drawdist">5000</span>
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <h3>Shadows</h3>
+    <div class="setting-row">
+      <span class="setting-label">Shadows</span>
+      <label class="toggle-switch"><input type="checkbox" id="s-shadows" checked><span class="toggle-track"></span></label>
+    </div>
+    <div class="setting-row">
+      <span class="setting-label">Shadow Res</span>
+      <div class="seg-row">
+        <button class="seg-btn" data-shadow="512">512</button>
+        <button class="seg-btn" data-shadow="1024">1024</button>
+        <button class="seg-btn active" data-shadow="2048">2048</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <h3>Post-Processing</h3>
+    <div class="setting-row">
+      <span class="setting-label">Bloom</span>
+      <label class="toggle-switch"><input type="checkbox" id="s-bloom" checked><span class="toggle-track"></span></label>
+    </div>
+    <div class="setting-row">
+      <span class="setting-label">Bloom Strength</span>
+      <input class="setting-slider" type="range" id="s-bloomstr" min="0" max="1.0" step="0.05" value="0.35">
+      <span class="setting-value" id="sv-bloomstr">0.35</span>
+    </div>
+    <div class="setting-row">
+      <span class="setting-label">Antialias</span>
+      <label class="toggle-switch"><input type="checkbox" id="s-antialias" checked><span class="toggle-track"></span></label>
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <h3>Environment</h3>
+    <div class="setting-row">
+      <span class="setting-label">Clouds</span>
+      <input class="setting-slider" type="range" id="s-clouds" min="0" max="30" step="1" value="20">
+      <span class="setting-value" id="sv-clouds">20</span>
+    </div>
+    <div class="setting-row">
+      <span class="setting-label">Rain/Snow Particles</span>
+      <input class="setting-slider" type="range" id="s-rain" min="0" max="12000" step="500" value="8000">
+      <span class="setting-value" id="sv-rain">8K</span>
+    </div>
+    <div class="setting-row">
+      <span class="setting-label">Fog Density</span>
+      <input class="setting-slider" type="range" id="s-fog" min="0" max="0.005" step="0.0002" value="0.0006">
+      <span class="setting-value" id="sv-fog">0.0006</span>
+    </div>
+    <div class="setting-row">
+      <span class="setting-label">Fog Particles</span>
+      <label class="toggle-switch"><input type="checkbox" id="s-fogparticles" checked><span class="toggle-track"></span></label>
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <h3>Debug</h3>
+    <div class="setting-row">
+      <span class="setting-label">FPS Counter</span>
+      <label class="toggle-switch"><input type="checkbox" id="s-fps"><span class="toggle-track"></span></label>
+    </div>
+  </div>
+</div>
+
+<!-- Three.js + game loader: CDN primary, local lib/ fallback -->
+<script>
+(function() {
+  var libs = [
+    { cdn: 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js', local: 'lib/three.min.js' },
+    { cdn: 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js', local: 'lib/EffectComposer.js' },
+    { cdn: 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js', local: 'lib/RenderPass.js' },
+    { cdn: 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js', local: 'lib/UnrealBloomPass.js' },
+    { cdn: 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js', local: 'lib/CopyShader.js' },
+    { cdn: 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js', local: 'lib/LuminosityHighPassShader.js' },
+    { cdn: 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js', local: 'lib/ShaderPass.js' }
+  ];
+
+  var gameScripts = [
+    'js/config.js', 'js/noise.js', 'js/sky.js', 'js/lights.js',
+    'js/terrain.js', 'js/grass.js', 'js/clouds.js', 'js/weather.js',
+    'js/fog.js', 'js/lightning.js', 'js/tornado.js', 'js/flare.js',
+    'js/controls.js', 'js/ui.js', 'js/main.js'
+  ];
+
+  function loadScript(src) {
+    return new Promise(function(resolve, reject) {
+      var s = document.createElement('script');
+      s.src = src;
+      s.onload = resolve;
+      s.onerror = reject;
+      document.body.appendChild(s);
+    });
+  }
+
+  function loadLib(lib) {
+    return loadScript(lib.cdn).then(function() {
+      console.log('[Loader] CDN OK: ' + lib.cdn);
+    }).catch(function() {
+      console.warn('[Loader] CDN failed, falling back to local: ' + lib.local);
+      return loadScript(lib.local);
+    });
+  }
+
+  // Load libs sequentially (order matters), then game scripts
+  libs.reduce(function(chain, lib) {
+    return chain.then(function() { return loadLib(lib); });
+  }, Promise.resolve())
+  .then(function() {
+    console.log('[Loader] All libraries loaded — THREE r' + THREE.REVISION);
+    return gameScripts.reduce(function(chain, src) {
+      return chain.then(function() { return loadScript(src); });
+    }, Promise.resolve());
+  })
+  .catch(function(err) {
+    console.error('[Loader] Fatal: failed to load a required script', err);
+    document.body.innerHTML = '<h1 style="color:red;font-family:monospace;text-align:center;margin-top:20%">' +
+      'Failed to load game libraries.<br>Check your connection and refresh.</h1>';
+  });
+})();
+</script>
+
+</body>
+</html>
